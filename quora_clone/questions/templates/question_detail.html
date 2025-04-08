@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Question Detail</title>
+</head>
+<body>
+    <h1>{{ question.title }}</h1>
+    <p>{{ question.content }}</p>
+    <h2>Answers</h2>
+    {% for answer in question.answers.all %}
+        <p>{{ answer.content }}</p>
+        <p>Likes: {{ answer.likes.count }}</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'like_answer' answer.id %}">Like</a>
+        {% endif %}
+    {% endfor %}
+    {% if user.is_authenticated %}
+        <h2>Post an Answer</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit</button>
+        </form>
+    {% else %}
+        <p>You are not logged in. Please <a href="{% url 'login' %}">login</a> to post an answer.</p>
+    {% endif %}
+    <a href="{% url 'home' %}">Back to Home</a>
+</body>
+</html>
